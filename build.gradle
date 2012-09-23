@@ -1,0 +1,46 @@
+apply plugin: 'war'
+apply plugin: 'java'
+buildscript {
+	repositories {
+		ivy {
+			name = 'gradle_templates'
+			artifactPattern "http://launchpad.net/[organization]/trunk/[revision]/+download/[artifact]-[revision].jar"
+		}
+	}
+	dependencies {
+		classpath 'gradle-templates:templates:1.2'
+	}
+}
+// Check to make sure templates.TemplatesPlugin isn't already added.
+if (!project.plugins.findPlugin(templates.TemplatesPlugin)) {
+	project.apply(plugin: templates.TemplatesPlugin)
+}
+apply plugin: "templates"
+
+repositories {
+    mavenCentral()
+}
+
+
+
+springVersion = "3.0.5.RELEASE"
+slf4jVersion = "1.6.1"
+hibVersion = "4.0.0.Final"
+
+dependencies {
+    // Set-up Compile time dependencies
+    compile "org.slf4j:jcl-over-slf4j:$slf4jVersion",          
+        "org.slf4j:jul-to-slf4j:$slf4jVersion"
+    // Pull in all of the Spring dependencies 
+
+
+    compile "org.springframework:spring-core:$springVersion",            
+        "org.springframework:spring-orm:$springVersion",
+        "org.hibernate:hibernate-core:$hibVersion",
+        "org.hibernate:hibernate-entitymanager:$hibVersion",
+        "org.springframework.data:spring-data-jpa:1.0.3.RELEASE",
+	"org.hsqldb:hsqldb:2.2.4"
+        
+    testCompile group: 'junit', name: 'junit', version: '4.8+'
+    testCompile "org.springframework:spring-test:$springVersion"
+}
