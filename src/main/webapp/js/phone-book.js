@@ -179,7 +179,7 @@ $(function () {
 //
 //    });
 
-    var controller = new Controller();
+   // var controller = new Controller();
 
     Backbone.history.start();
     //TEST INIT
