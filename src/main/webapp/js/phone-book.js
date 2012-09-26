@@ -15,24 +15,25 @@ $(function () {
             // Default attributes for the Contact item
             defaults:function () {
                 return {
-                    name:"No name no cry",
-                    email:"No email no cry",
+                    name:"",
+                    email:"",
                     phone:"No phone no cry"
                 };
             },
 
             validation:{
                 name:{
-                    required:true,
+                    minLength:5,
                     msg:'Please enter a name'
                 },
                 phone:{
-                    required:true,
+                    minLength:5,
                     pattern:'number',
                     msg:'Please enter a valid phone number'
                 },
                 email:{
                     pattern:'email',
+                    minLength:5,
                     msg:'Please enter a valid email'
                 }
             }
@@ -81,7 +82,7 @@ $(function () {
 
             openContact:function (e) {
 
-                e.preventDefault();
+               // e.preventDefault();
                 var id = $(e.currentTarget).data("id");
                 var item = this.model.get(id);
                 var contactView = new ContactDetailsView({model:item});
@@ -99,7 +100,8 @@ $(function () {
             template:_.template($('#contact-details-template').html()),
 
             events:{
-                "blur input":"updateContact"
+                "click  #form-btn": "updateContact"
+
             },
 
             render:function () {
@@ -146,12 +148,19 @@ $(function () {
                 var newName = this.$("#inputName").val();
                 var newPhone = this.$("#inputPhone").val();
                 var newEmail = this.$("#inputEmail").val();
-                if(this.model.id ==undefined )
-                {
-                    testCollection.add(this.model);
-                }
-                this.model.save({name:newName, phone:newPhone, email:newEmail });
+                var contactId = $("#contactId").val();
+                var item;
+                if ( contactId === "undefined") {
+                    console.log('new');
+                    item = new Contact();
+                    testCollection.add(item);
 
+                } else {
+                    console.log('old');
+                    item = testCollection.get(contactId);
+                }
+
+                item.save({name:newName, phone:newPhone, email:newEmail});
             }
         }
     );
@@ -163,17 +172,17 @@ $(function () {
 
 
     var Controller = Backbone.Router.extend({
-        routes: {
-            "": "list",
-            "!/": "list",
-            "!/add": "add"
+        routes:{
+            "":"list",
+            "!/":"list",
+            "!/add":"add"
         },
 
-        list: function () {
-        console.log('list');
+        list:function () {
+            console.log('list');
         },
 
-        add: function () {
+        add:function () {
             console.log('add');
             var item = new Contact();
             var contactView = new ContactDetailsView({model:item});
