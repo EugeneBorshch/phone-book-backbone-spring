@@ -19,11 +19,11 @@
 <div class="navbar navbar-inverse navbar-fixed-top">
     <div class="navbar-inner">
         <div class="container">
-            <a class="brand" href="#">Phone Book</a>
+            <a class="brand" href="">Phone Book</a>
 
             <div class="nav-collapse collapse">
                 <ul class="nav">
-                    <li><a href="#about">Add</a></li>
+                    <li><a href="#!/add">Add</a></li>
                 </ul>
             </div>
             <!--/.nav-collapse -->
@@ -86,7 +86,7 @@
 </script>
 
 <script type="text/template" id="contact-details-template">
-    <div id="contact-details-placeholder">
+
     <div class="control-group">
         <label class="control-label" for="inputName">Name:</label>
 
@@ -118,8 +118,16 @@
                 <input type="text" id="inputPhone" placeholder="Phone" class="error" value="<%=contact.phone%>">
             </div>
         </div>
+
     </div>
+
+    <div class="control-group">
+        <div class="controls">
+            <button class="btn btn-primary" type="button">Save</button>
+        </div>
     </div>
+
+
 </script>
 
 </body>

@@ -146,7 +146,10 @@ $(function () {
                 var newName = this.$("#inputName").val();
                 var newPhone = this.$("#inputPhone").val();
                 var newEmail = this.$("#inputEmail").val();
-                 console.log(this.model.toJSON());
+                if(this.model.id ==undefined )
+                {
+                    testCollection.add(this.model);
+                }
                 this.model.save({name:newName, phone:newPhone, email:newEmail });
 
             }
@@ -159,29 +162,30 @@ $(function () {
 
 
 
-//    var Controller = Backbone.Router.extend({
-//        routes: {
-//            "": "list",
-//            "!/": "list",
-//            "!/add": "add"
-//        },
-//
-//        start: function () {
-//            $(".block").hide();
-//            $("#start").show();
-//        },
-//
-//        success: function () {
-//            $(".block").hide();
-//            $("#success").show();
-//        }
-//
-//
-//    });
+    var Controller = Backbone.Router.extend({
+        routes: {
+            "": "list",
+            "!/": "list",
+            "!/add": "add"
+        },
 
-   // var controller = new Controller();
+        list: function () {
+        console.log('list');
+        },
 
-   // Backbone.history.start();
+        add: function () {
+            console.log('add');
+            var item = new Contact();
+            var contactView = new ContactDetailsView({model:item});
+            contactView.render();
+        }
+
+
+    });
+
+    var controller = new Controller();
+
+    Backbone.history.start();
     //TEST INIT
     var testCollection = new ContactCollection();
 
