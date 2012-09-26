@@ -181,7 +181,7 @@ $(function () {
 
    // var controller = new Controller();
 
-    Backbone.history.start();
+   // Backbone.history.start();
     //TEST INIT
     var testCollection = new ContactCollection();
 
