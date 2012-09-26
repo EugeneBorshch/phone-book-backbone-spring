@@ -146,9 +146,10 @@ $(function () {
                 var newName = this.$("#inputName").val();
                 var newPhone = this.$("#inputPhone").val();
                 var newEmail = this.$("#inputEmail").val();
-                 console.log(this.model.toJSON());
-                this.model.save({name:newName, phone:newPhone, email:newEmail });
+                var contactId = $("#contactId").val();
 
+                var item = this.model.collection.get(contactId);
+                item.save({name:newName, phone:newPhone, email:newEmail});
             }
         }
     );
