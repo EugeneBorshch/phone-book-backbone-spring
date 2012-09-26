@@ -75,6 +75,7 @@
 <script src="js/underscore.js"></script>
 <script src="js/backbone.js"></script>
 <script src="js/backbone.localstorage.js"></script>
+<script src="js/backbone.validation.js"></script>
 <script src="js/phone-book.js"></script>
 
 
@@ -85,6 +86,7 @@
 </script>
 
 <script type="text/template" id="contact-details-template">
+    <div id="contact-details-placeholder">
     <div class="control-group">
         <label class="control-label" for="inputName">Name:</label>
 
@@ -113,9 +115,10 @@
         <div class="controls">
             <div class="input-prepend">
                 <span class="add-on"><i class="icon-th"></i></span>
-                <input type="text" id="inputPhone" placeholder="Phone" value="<%=contact.phone%>">
+                <input type="text" id="inputPhone" placeholder="Phone" class="error" value="<%=contact.phone%>">
             </div>
         </div>
+    </div>
     </div>
 </script>
 
