@@ -31,15 +31,19 @@ dependencies {
     // Set-up Compile time dependencies
     compile "org.slf4j:jcl-over-slf4j:$slf4jVersion",          
         "org.slf4j:jul-to-slf4j:$slf4jVersion"
-    // Pull in all of the Spring dependencies 
 
 
+    // Pull in all of the Spring dependencies
     compile "org.springframework:spring-core:$springVersion",            
         "org.springframework:spring-orm:$springVersion",
+        "org.springframework.data:spring-data-jpa:1.0.3.RELEASE",
+        "org.springframework:spring-web:$springVersion",
+        "org.springframework:spring-webmvc:$springVersion",
+
         "org.hibernate:hibernate-core:$hibVersion",
         "org.hibernate:hibernate-entitymanager:$hibVersion",
-        "org.springframework.data:spring-data-jpa:1.0.3.RELEASE",
-	"org.hsqldb:hsqldb:2.2.4"
+
+	    "org.hsqldb:hsqldb:2.2.4"
         
     testCompile group: 'junit', name: 'junit', version: '4.8+'
     testCompile "org.springframework:spring-test:$springVersion"
