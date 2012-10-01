@@ -43,6 +43,8 @@ dependencies {
         "org.hibernate:hibernate-core:$hibVersion",
         "org.hibernate:hibernate-entitymanager:$hibVersion",
 
+        "org.codehaus.jackson:jackson-mapper-asl:1.7.1",
+
 	    "org.hsqldb:hsqldb:2.2.4"
         
     testCompile group: 'junit', name: 'junit', version: '4.8+'
