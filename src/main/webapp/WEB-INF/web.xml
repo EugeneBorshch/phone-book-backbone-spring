@@ -1,16 +1,37 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<!DOCTYPE web-app
-    PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
-    "http://java.sun.com/dtd/web-app_2_3.dtd">
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://java.sun.com/xml/ns/javaee"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+         version="3.0">
 
-<web-app>
-   <!-- General description of your web application -->
-   <display-name>phone-book-backbone-spring - Webapp</display-name>
-      <description>
-         Describe the phone-book-backbone-spring Webapp here.
-         vinsent@example.com
 
-         See http://tomcat.apache.org/tomcat-6.0-doc/appdev/web.xml.txt for more information
-         regarding this Web Descriptor File.
-   </description>
+
+    <servlet>
+        <servlet-name>mvc-dispatcher</servlet-name>
+        <servlet-class>
+            org.springframework.web.servlet.DispatcherServlet
+        </servlet-class>
+        <init-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>/WEB-INF/web-context.xml</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>mvc-dispatcher</servlet-name>
+        <url-pattern>/*</url-pattern>
+    </servlet-mapping>
+
+
+    <listener>
+        <listener-class>
+            org.springframework.web.context.ContextLoaderListener
+        </listener-class>
+    </listener>
+
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>classpath*:/spring-config.xml</param-value>
+    </context-param>
 </web-app>

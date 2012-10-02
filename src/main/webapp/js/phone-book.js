@@ -1,5 +1,6 @@
 /**
- * Created with IntelliJ IDEA.
+ * Phonebook backbone application
+ *\
  * User: EBorshch
  */
 

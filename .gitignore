@@ -3,4 +3,6 @@ build/
 .idea/
 spring-data-jpa.iml
 out/
-src/main/webapp/Webapp.iml
+phone-book-backbone-spring.iml
+src/main/Main.iml
+
