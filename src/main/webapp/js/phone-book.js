@@ -70,24 +70,12 @@ $(function () {
                 // this.model.on('destroy', this.remove, this);
             },
 
-            events:{
-                "click .entry":"openContact"
-            },
-
-
             render:function () {
+
                 $(this.el).html(this.template({contact:this.model.toJSON()}));
                 return this;
-            },
-
-            openContact:function (e) {
-
-               // e.preventDefault();
-                var id = $(e.currentTarget).data("id");
-                var item = this.model.get(id);
-                var contactView = new ContactDetailsView({model:item});
-                contactView.render();
             }
+
         }
     );
 
@@ -100,7 +88,7 @@ $(function () {
             template:_.template($('#contact-details-template').html()),
 
             events:{
-                "click  #form-btn": "updateContact"
+                "click  #form-btn":"updateContact"
 
             },
 
@@ -148,19 +136,25 @@ $(function () {
                 var newName = this.$("#inputName").val();
                 var newPhone = this.$("#inputPhone").val();
                 var newEmail = this.$("#inputEmail").val();
-                var contactId = $("#contactId").val();
-                var item;
-                if ( contactId === "undefined") {
-                    console.log('new');
-                    item = new Contact();
-                    testCollection.add(item);
 
-                } else {
-                    console.log('old');
-                    item = testCollection.get(contactId);
+                this.model.set({name:newName, phone:newPhone, email:newEmail});
+                var success;
+                if (this.model.isNew()) {
+                    console.log(this.model.isNew() + " is new");
+                    sucess = contactCollection.create(this.model);
                 }
+                else {
+                    sucess = this.model.save();
+                }
+                console.log(success);
+                if (success) {
+                    controller.navigate("!/", {trigger:true});
+                }
+            },
 
-                item.save({name:newName, phone:newPhone, email:newEmail});
+            close:function () {
+                $(this.el).unbind();
+                $(this.el).empty();
             }
         }
     );
@@ -175,18 +169,34 @@ $(function () {
         routes:{
             "":"list",
             "!/":"list",
+            "!/contact/:id":"details",
             "!/add":"add"
         },
 
         list:function () {
-            console.log('list');
+            if (this.contactView) {
+                this.contactView.close();
+            }
+        },
+
+        details:function (id) {
+            var item = contactCollection.get(id);
+            if (this.contactView) {
+                this.contactView.close();
+            }
+
+            this.contactView = new ContactDetailsView({model:item});
+            this.contactView.render();
         },
 
         add:function () {
-            console.log('add');
             var item = new Contact();
-            var contactView = new ContactDetailsView({model:item});
-            contactView.render();
+            if (this.contactView) {
+                this.contactView.close();
+            }
+
+            this.contactView = new ContactDetailsView({model:item});
+            this.contactView.render();
         }
 
 
@@ -196,24 +206,24 @@ $(function () {
 
     Backbone.history.start();
     //TEST INIT
-    var testCollection = new ContactCollection();
+    var contactCollection = new ContactCollection();
 
 
-    var contactView = new ContactListView({model:testCollection});
+    var contactView = new ContactListView({model:contactCollection});
 
-    testCollection.create({
+    contactCollection.create({
         name:"John Smith",
         phone:"144412311231",
         email:"john@smith.com"
     });
 
-    testCollection.create({
+    contactCollection.create({
         name:"Alison Burgers",
         phone:"2223333543",
         email:"alison@burgers.com"
     });
 
-    testCollection.create({
+    contactCollection.create({
         name:"Ben Roonie",
         phone:"4444444",
         email:"ben@roonie.com"

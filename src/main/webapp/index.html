@@ -81,7 +81,7 @@
 
 <script type="text/template" id="contact-list-template" >
     <% _.each(contact, function(entry) { %>
-        <li><a href="#" class="entry" data-id="<%= entry.id %>"><%= entry.name %></a></li>
+        <li><a href="#!/contact/<%= entry.id %>" class="entry" ><%= entry.name %></a></li>
     <% });%>
 </script>
 
