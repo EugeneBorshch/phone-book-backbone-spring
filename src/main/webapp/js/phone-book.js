@@ -68,7 +68,7 @@ $(function () {
 
             initialize:function () {
                 this.model.on('change', this.render, this);
-                // this.model.on('destroy', this.remove, this);
+                this.model.on('remove', this.render, this);
             },
 
             render:function () {
@@ -89,22 +89,28 @@ $(function () {
             template:_.template($('#contact-details-template').html()),
 
             events:{
-                "click  #form-btn":"updateContact"
+                "click  #form-btn":"updateContact",
+                "click  #form-btn-remove":"deleteContact"
 
             },
 
             render:function () {
-                $(this.el).html(this.template({contact:this.model.toJSON()}));
+                $(this.el).html(this.template({
+                    contact:this.model.toJSON()
+                }));
+
+                if (this.model.isNew()) {
+                    $("#form-btn-remove").addClass("disabled");
+                }
 
                 Backbone.Validation.bind(this, {
                     valid:function (view, attr) {
+
                         var control;
                         if (attr == 'name')
                             control = $('#inputName');
-                        var control;
                         if (attr == 'phone')
                             control = $('#inputPhone');
-                        var control;
                         if (attr == 'email')
                             control = $('#inputEmail');
                         if (control != undefined) {
@@ -116,10 +122,8 @@ $(function () {
                         var control;
                         if (attr == 'name')
                             control = $('#inputName');
-                        var control;
                         if (attr == 'phone')
                             control = $('#inputPhone');
-                        var control;
                         if (attr == 'email')
                             control = $('#inputEmail');
                         if (control != undefined) {
@@ -138,21 +142,28 @@ $(function () {
                 var newPhone = this.$("#inputPhone").val();
                 var newEmail = this.$("#inputEmail").val();
 
-                this.model.set({name:newName, phone:newPhone, email:newEmail});
-                var success;
-                if (this.model.isNew()) {
-                    console.log(this.model.isNew() + " is new");
-                    sucess = contactCollection.create(this.model);
-                }
-                else {
-                    sucess = this.model.save();
-                }
-                console.log(success);
+                var success = this.model.set({name:newName, phone:newPhone, email:newEmail});
                 if (success) {
+                    if (this.model.isNew()) {
+                        success = contactCollection.create(this.model);
+                    }
+                    else {
+                        success = this.model.save();
+                    }
                     controller.navigate("!/", {trigger:true});
                 }
             },
 
+            deleteContact:function (e) {
+                e.preventDefault();
+                if (!this.model.isNew()) {
+                    contactCollection.remove(this.model);
+                    controller.navigate("!/", {trigger:true})
+                }
+            },
+
+            //kill zombie views
+            //http://lostechies.com/derickbailey/2011/09/15/zombies-run-managing-page-transitions-in-backbone-apps/
             close:function () {
                 $(this.el).unbind();
                 $(this.el).empty();
@@ -210,7 +221,7 @@ $(function () {
     var contactCollection = new ContactCollection();
 
 
-    var contactView = new ContactListView({model:contactCollection});
+    var contactListView = new ContactListView({model:contactCollection});
 
     contactCollection.create({
         name:"John Smith",
