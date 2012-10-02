@@ -47,13 +47,16 @@ $(function () {
     var ContactCollection = Backbone.Collection.extend(
         {
             model:Contact,
-            localStorage:new Backbone.LocalStorage("phone-backbone"),
+            url:"contacts/",
+            // localStorage:new Backbone.LocalStorage("phone-backbone"),
 
             comparator:function (contact) {
                 return contact.get("name");
             }
         }
     );
+
+
 
 
     /**********************************************************************************
@@ -63,16 +66,16 @@ $(function () {
         {
             el:$("#contact-list-block"), // DOM element with contact list
 
-
             template:_.template($('#contact-list-template').html()),
 
             initialize:function () {
-                this.model.on('change', this.render, this);
+                console.log("Init view".concat(this.model.toJSON()))  ;
+                this.model.on('all', this.render, this);
                 this.model.on('remove', this.render, this);
             },
 
             render:function () {
-
+                console.log("Try to render ".concat(this.model.toJSON()))  ;
                 $(this.el).html(this.template({contact:this.model.toJSON()}));
                 return this;
             }
@@ -145,10 +148,10 @@ $(function () {
                 var success = this.model.set({name:newName, phone:newPhone, email:newEmail});
                 if (success) {
                     if (this.model.isNew()) {
-                        success = contactCollection.create(this.model);
+                        contactCollection.create(this.model,{wait: true});
                     }
                     else {
-                        success = this.model.save();
+                       this.model.save({wait: true});
                     }
                     controller.navigate("!/", {trigger:true});
                 }
@@ -189,6 +192,13 @@ $(function () {
             if (this.contactView) {
                 this.contactView.close();
             }
+
+            console.log("Before collection  ".concat(contactCollection.toJSON()));
+            if (contactCollection) {
+                contactCollection.fetch();
+            }
+            console.log("After collection  ".concat(contactCollection.toJSON()));
+
         },
 
         details:function (id) {
@@ -214,15 +224,28 @@ $(function () {
 
     });
 
+
+    var contactCollection = new ContactCollection();
+    contactCollection.reset();
+
+    var contactListView = new ContactListView({model:contactCollection});
+      contactListView.render();
+
     var controller = new Controller();
 
     Backbone.history.start();
+
+
+
+
+
+    //contactListView.render();
     //TEST INIT
-    var contactCollection = new ContactCollection();
 
 
-    var contactListView = new ContactListView({model:contactCollection});
 
+    //var contactListView = new ContactListView({model:contactCollection});
+/*
     contactCollection.create({
         name:"John Smith",
         phone:"144412311231",
@@ -239,6 +262,6 @@ $(function () {
         name:"Ben Roonie",
         phone:"4444444",
         email:"ben@roonie.com"
-    });
+    });*/
 
 });

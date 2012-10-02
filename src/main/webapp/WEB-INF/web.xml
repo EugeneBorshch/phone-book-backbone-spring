@@ -20,7 +20,7 @@
 
     <servlet-mapping>
         <servlet-name>mvc-dispatcher</servlet-name>
-        <url-pattern>/*</url-pattern>
+        <url-pattern>/contacts/</url-pattern>
     </servlet-mapping>
 
 

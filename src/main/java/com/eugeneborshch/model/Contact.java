@@ -1,13 +1,16 @@
 package com.eugeneborshch.model;
 
+
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
 public class Contact {
 
     @Id
-    private int id;
+    @GeneratedValue
+    private Integer id;
 
     private String name;
     private String phone;
@@ -15,11 +18,11 @@ public class Contact {
     private String email;
 
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -45,5 +48,15 @@ public class Contact {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    @Override
+    public String toString() {
+        return "Contact{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", phone='" + phone + '\'' +
+                ", email='" + email + '\'' +
+                '}';
     }
 }
