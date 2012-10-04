@@ -25,36 +25,32 @@ public class ContactsController {
     private ContactRepository repository;
 
 
-    @RequestMapping(method= RequestMethod.GET, value="/contacts")
+    @RequestMapping(method= RequestMethod.GET, value="")
     public @ResponseBody List<Contact> getContacts() {
-        System.out.println("get all contacts");
         return new ArrayList<Contact>((Collection<? extends Contact>) repository.findAll());
     }
 
-    @RequestMapping(method=RequestMethod.GET, value="/contacts/{id}")
+    @RequestMapping(method=RequestMethod.GET, value="/{id}")
     public @ResponseBody  Contact getContact(@PathVariable Integer id) {
-        System.out.println("get contact "+id);
         return repository.findOne(id);
     }
 
-    @RequestMapping(method=RequestMethod.POST, value="/contacts")
+    @RequestMapping(method=RequestMethod.POST, value="")
     public @ResponseBody Contact addContact(@RequestBody Contact contact) {
         System.out.println("add contact "+contact);
         repository.save(contact);
         return contact;
     }
 
-    @RequestMapping(method=RequestMethod.PUT, value="/contacts/{id}")
+    @RequestMapping(method=RequestMethod.PUT, value="{id}")
     public @ResponseBody Contact updateContact(
             @RequestBody Contact contact, @PathVariable String id) {
-        System.out.println("update contact " +contact);
         repository.save(contact);
         return contact;
     }
 
-    @RequestMapping(method=RequestMethod.DELETE, value="/contacts/{id}")
+    @RequestMapping(method=RequestMethod.DELETE, value="/{id}")
     public @ResponseBody void deleteContact(@PathVariable String id) {
-        System.out.println("delete contact "+id);
         repository.delete(Integer.parseInt(id));
     }
 
@@ -62,10 +58,24 @@ public class ContactsController {
     @PostConstruct
     public void init() {
         System.out.println("init test data");
-        Contact c =new Contact();
+        Contact c = new Contact();
         c.setName("Indiana Jons");
-        c.setPhone("23423453");
+        c.setPhone("11111111");
         c.setEmail("indiana@jones.com");
+        repository.save(c);
+
+
+        c = new Contact();
+        c.setName("Hans Solo");
+        c.setPhone("333333333");
+        c.setEmail("hans@solo.com");
+        repository.save(c);
+
+
+        c = new Contact();
+        c.setName("Rick Deckard");
+        c.setPhone("222222222");
+        c.setEmail("rick@deckard.com");
         repository.save(c);
     }
 

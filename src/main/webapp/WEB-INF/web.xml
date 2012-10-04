@@ -20,8 +20,20 @@
 
     <servlet-mapping>
         <servlet-name>mvc-dispatcher</servlet-name>
-        <url-pattern>/contacts/</url-pattern>
+        <url-pattern>/contacts/*</url-pattern>
     </servlet-mapping>
+
+
+    <!-- Enables use of HTTP methods PUT and DELETE -->
+    <filter>
+        <filter-name>httpMethodFilter</filter-name>
+        <filter-class>org.springframework.web.filter.HiddenHttpMethodFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>httpMethodFilter</filter-name>
+        <servlet-name>mvc-dispatcher</servlet-name>
+    </filter-mapping>
 
 
     <listener>

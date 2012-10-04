@@ -7,7 +7,6 @@
 //Load application with JQuery when DOM is ready
 $(function () {
 
-
     /**********************************************************************************
      **                     Models
      **********************************************************************************/
@@ -18,7 +17,7 @@ $(function () {
                 return {
                     name:"",
                     email:"",
-                    phone:"No phone no cry"
+                    phone:""
                 };
             },
 
@@ -43,20 +42,16 @@ $(function () {
 
 
     // The collection of contacts
-
     var ContactCollection = Backbone.Collection.extend(
         {
             model:Contact,
-            url:"contacts/",
-            // localStorage:new Backbone.LocalStorage("phone-backbone"),
+            url:"/contacts/",
 
             comparator:function (contact) {
                 return contact.get("name");
             }
         }
     );
-
-
 
 
     /**********************************************************************************
@@ -69,13 +64,12 @@ $(function () {
             template:_.template($('#contact-list-template').html()),
 
             initialize:function () {
-                console.log("Init view".concat(this.model.toJSON()))  ;
+                console.log("Init view".concat(this.model.toJSON()));
                 this.model.on('all', this.render, this);
-                this.model.on('remove', this.render, this);
             },
 
             render:function () {
-                console.log("Try to render ".concat(this.model.toJSON()))  ;
+                console.log("Try to render ".concat(this.model.toJSON()));
                 $(this.el).html(this.template({contact:this.model.toJSON()}));
                 return this;
             }
@@ -88,13 +82,11 @@ $(function () {
         {
             el:$("#contact-details-block"), // DOM element with contact details
 
-
             template:_.template($('#contact-details-template').html()),
 
             events:{
                 "click  #form-btn":"updateContact",
                 "click  #form-btn-remove":"deleteContact"
-
             },
 
             render:function () {
@@ -148,20 +140,24 @@ $(function () {
                 var success = this.model.set({name:newName, phone:newPhone, email:newEmail});
                 if (success) {
                     if (this.model.isNew()) {
-                        contactCollection.create(this.model,{wait: true});
+                        contactCollection.create(this.model, {wait:true});
                     }
                     else {
-                       this.model.save({wait: true});
+                        this.model.save({}, {wait:true});
                     }
-                    controller.navigate("!/", {trigger:true});
+                    controller.navigate("", {trigger:true});
                 }
             },
 
             deleteContact:function (e) {
                 e.preventDefault();
                 if (!this.model.isNew()) {
+                    console.log("BEFORE DELETE ".concat(contactCollection.length));
+
+                    this.model.destroy({wait:true});
                     contactCollection.remove(this.model);
-                    controller.navigate("!/", {trigger:true})
+                    console.log("AFTER  DELETE ".concat(contactCollection.length));
+                    controller.navigate("", {trigger:true})
                 }
             },
 
@@ -177,9 +173,6 @@ $(function () {
     /**********************************************************************************
      **                     Router
      **********************************************************************************/
-
-
-
     var Controller = Backbone.Router.extend({
         routes:{
             "":"list",
@@ -195,6 +188,7 @@ $(function () {
 
             console.log("Before collection  ".concat(contactCollection.toJSON()));
             if (contactCollection) {
+                console.log("FETCH collection  ".concat(contactCollection.toJSON()));
                 contactCollection.fetch();
             }
             console.log("After collection  ".concat(contactCollection.toJSON()));
@@ -220,48 +214,15 @@ $(function () {
             this.contactView = new ContactDetailsView({model:item});
             this.contactView.render();
         }
-
-
     });
-
 
     var contactCollection = new ContactCollection();
     contactCollection.reset();
 
     var contactListView = new ContactListView({model:contactCollection});
-      contactListView.render();
+    contactListView.render();
 
     var controller = new Controller();
 
     Backbone.history.start();
-
-
-
-
-
-    //contactListView.render();
-    //TEST INIT
-
-
-
-    //var contactListView = new ContactListView({model:contactCollection});
-/*
-    contactCollection.create({
-        name:"John Smith",
-        phone:"144412311231",
-        email:"john@smith.com"
-    });
-
-    contactCollection.create({
-        name:"Alison Burgers",
-        phone:"2223333543",
-        email:"alison@burgers.com"
-    });
-
-    contactCollection.create({
-        name:"Ben Roonie",
-        phone:"4444444",
-        email:"ben@roonie.com"
-    });*/
-
 });
