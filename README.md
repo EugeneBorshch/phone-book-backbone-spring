@@ -1,7 +1,12 @@
 phone-book-backbone-spring
 ==========================
 
-Phone book test application. Spring MVC + Spring Data + Redis + Backbone.js + Bootstrap
+Simple "Phone Book" test application using Backbone.js and Spring MVC.
+
+* Spring MVC 
+* Spring Data 
+* Backbone.js
+* Bootstrap
 
 
-![Alt attribute text Here](/screen.png)
+![Phone Book](https://raw.github.com/EugeneBorshch/phone-book-backbone-spring/master/screen.jpg)
