@@ -64,12 +64,10 @@ $(function () {
             template:_.template($('#contact-list-template').html()),
 
             initialize:function () {
-                console.log("Init view".concat(this.model.toJSON()));
                 this.model.on('all', this.render, this);
             },
 
             render:function () {
-                console.log("Try to render ".concat(this.model.toJSON()));
                 $(this.el).html(this.template({contact:this.model.toJSON()}));
                 return this;
             }
@@ -152,11 +150,8 @@ $(function () {
             deleteContact:function (e) {
                 e.preventDefault();
                 if (!this.model.isNew()) {
-                    console.log("BEFORE DELETE ".concat(contactCollection.length));
-
                     this.model.destroy({wait:true});
                     contactCollection.remove(this.model);
-                    console.log("AFTER  DELETE ".concat(contactCollection.length));
                     controller.navigate("", {trigger:true})
                 }
             },
@@ -186,23 +181,39 @@ $(function () {
                 this.contactView.close();
             }
 
-            console.log("Before collection  ".concat(contactCollection.toJSON()));
             if (contactCollection) {
-                console.log("FETCH collection  ".concat(contactCollection.toJSON()));
                 contactCollection.fetch();
             }
-            console.log("After collection  ".concat(contactCollection.toJSON()));
 
         },
 
         details:function (id) {
             var item = contactCollection.get(id);
-            if (this.contactView) {
-                this.contactView.close();
+            if (!item) {
+
+                contactCollection.fetch({success:function () {
+                    item = contactCollection.get(id);
+
+                    if (this.contactView) {
+                        this.contactView.close();
+                    }
+
+                    this.contactView = new ContactDetailsView({model:item});
+                    this.contactView.render();
+
+                }});
+
+
+            } else {
+                if (this.contactView) {
+                    this.contactView.close();
+                }
+
+                this.contactView = new ContactDetailsView({model:item});
+                this.contactView.render();
+
             }
 
-            this.contactView = new ContactDetailsView({model:item});
-            this.contactView.render();
         },
 
         add:function () {
@@ -217,7 +228,7 @@ $(function () {
     });
 
     var contactCollection = new ContactCollection();
-    contactCollection.reset();
+    contactCollection.reset(contactCollection.toJSON());
 
     var contactListView = new ContactListView({model:contactCollection});
     contactListView.render();
